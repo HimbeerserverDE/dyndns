@@ -11,16 +11,16 @@ func main() {
 	const usage = "override the default config path"
 	configFile := flag.String("config", "/etc/dyndns.conf", usage)
 
-	config := &config{}
-	if err := config.parse(*configFile); err != nil {
+	conf := &config{}
+	if err := conf.parse(*configFile); err != nil {
 		log.Fatal(err)
 	}
 
 	update4 := make(chan net.IPAddr)
 	update6 := make(chan net.IPNet)
 
-	go monitor4(update4)
-	go monitor6(update6)
+	go monitor4(conf, update4)
+	go monitor6(conf, update6)
 
 	for {
 		select {
