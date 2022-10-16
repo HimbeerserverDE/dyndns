@@ -3,7 +3,6 @@ package main
 
 import (
 	"flag"
-	"log"
 	"net"
 )
 
@@ -13,7 +12,7 @@ func main() {
 
 	conf := &config{}
 	if err := conf.parse(*configFile); err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 	update4 := make(chan net.IPAddr)
