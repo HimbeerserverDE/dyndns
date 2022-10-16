@@ -1,2 +1,2 @@
 # dyndns
-Package dyndns is a dual-stack DDNS client that uses the INWX JSON-RPC API.
+dyndns is a dual-stack DynDNS client that uses the INWX JSON-RPC API.
