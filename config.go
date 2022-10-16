@@ -3,12 +3,14 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"time"
 )
 
 type config struct {
 	User      string
 	Passwd    string
 	Link      string
+	Interval  time.Duration
 	PrefixLen int
 	Records4  []int
 	Records6  []int
