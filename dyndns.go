@@ -3,7 +3,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"net"
 
 	"github.com/HimbeerserverDE/inwx"
@@ -60,5 +59,56 @@ func nsUpdate4(conf *config, addr *net.IPAddr) error {
 }
 
 func nsUpdate6(conf *config, prefix *net.IPNet) error {
-	return fmt.Errorf("updating IPv6 records is not yet implemented")
+	clt, err := inwx.Login(inwx.Production, conf.User, conf.Passwd)
+	if err != nil {
+		return err
+	}
+	defer clt.Close()
+
+	for _, id := range conf.Records6 {
+		resp, err := clt.Call(&inwx.NSRecordInfoCall{
+			RecordID: id,
+			Type:     "AAAA",
+		})
+		if err != nil {
+			logger.Printf("can't get info, skipping IPv6 record %d: %v", id, err)
+			continue
+		}
+
+		record := &inwx.NSRecordInfoResponse{}
+		if err := resp.Into(record); err != nil {
+			logger.Printf("IPv6 record response is invalid: %v", err)
+			continue
+		}
+
+		if len(record.Record) != 1 {
+			logger.Printf("invalid number of IPv6 records: %d != 1", len(record.Record))
+			continue
+		}
+
+		addr := net.ParseIP(record.Record[0].Content)
+		if addr == nil {
+			logger.Printf("invalid IPv6 record %d: %s", id, record.Record[0].Content)
+			continue
+		}
+
+		ifidMask := net.CIDRMask(conf.PrefixLen, 128)
+		for k, v := range ifidMask {
+			ifidMask[k] = ^v
+		}
+
+		ifid := addr.Mask(ifidMask)
+
+		newAddr := prefix.IP
+		for k, v := range newAddr {
+			newAddr[k] = v | ifid[k]
+		}
+
+		if err := updateRecords(clt, []int{id}, newAddr.String()); err != nil {
+			logger.Printf("can't update, skipping IPv6 record %d: %v", id, err)
+			continue
+		}
+	}
+
+	return nil
 }
