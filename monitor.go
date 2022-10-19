@@ -73,7 +73,7 @@ func monitor6(conf *config, update6 chan<- net.IPNet) {
 		}
 
 		if !prefix6.Equal(prevPrefix6) {
-			logger.Println("detected new IPv6 address:", prefix6)
+			logger.Println("detected new IPv6 prefix:", prefix6)
 			update6 <- prefix6
 
 			prevPrefix6 = prefix6
