@@ -12,13 +12,13 @@ func monitor4(conf *config, update4 chan<- *net.IPAddr) {
 	for range refresh.C {
 		link, err := net.InterfaceByName(conf.Link4)
 		if err != nil {
-			logger.Printf("can't find interface %s: %w", conf.Link4, err)
+			logger.Printf("can't find interface %s: %v", conf.Link4, err)
 			continue
 		}
 
 		addrs, err := link.Addrs()
 		if err != nil {
-			const format = "can't read IPv4 addresses from %s: %w"
+			const format = "can't read IPv4 addresses from %s: %v"
 			logger.Printf(format, conf.Link4, err)
 			continue
 		}
@@ -49,13 +49,13 @@ func monitor6(conf *config, update6 chan<- *net.IPNet) {
 	for range refresh.C {
 		link, err := net.InterfaceByName(conf.Link6)
 		if err != nil {
-			logger.Printf("can't find interface %s: %w", conf.Link6, err)
+			logger.Printf("can't find interface %s: %v", conf.Link6, err)
 			continue
 		}
 
 		addrs, err := link.Addrs()
 		if err != nil {
-			const format = "can't read IPv6 addresses from %s: %w"
+			const format = "can't read IPv6 addresses from %s: %v"
 			logger.Printf(format, conf.Link6, err)
 			continue
 		}
