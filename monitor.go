@@ -2,11 +2,14 @@ package main
 
 import (
 	"net"
+	"reflect"
 	"time"
 )
 
 func monitor4(conf *config, update4 chan<- net.IPAddr) {
 	refresh := time.NewTicker(conf.Interval)
+
+	var prevAddr4 *net.IPAddr
 	for range refresh.C {
 		link, err := net.InterfaceByName(conf.Link4)
 		if err != nil {
@@ -30,11 +33,20 @@ func monitor4(conf *config, update4 chan<- net.IPAddr) {
 				break
 			}
 		}
+
+		if !reflect.DeepEqual(addr4, prevAddr4) {
+			logger.Println("detected new IPv4 address:", addr4)
+			update4 <- addr4
+
+			prevAddr4 = addr4
+		}
 	}
 }
 
 func monitor6(conf *config, update6 chan<- net.IPNet) {
 	refresh := time.NewTicker(conf.Interval)
+
+	var prevPrefix6 *net.IPNet
 	for range refresh.C {
 		link, err := net.InterfaceByName(conf.Link6)
 		if err != nil {
@@ -59,6 +71,13 @@ func monitor6(conf *config, update6 chan<- net.IPNet) {
 
 				break
 			}
+		}
+
+		if !reflect.DeepEqual(prefix6, prevPrefix6) {
+			logger.Println("detected new IPv6 address:", prefix6)
+			update6 <- prefix6
+
+			prevPrefix6 = prefix6
 		}
 	}
 }
