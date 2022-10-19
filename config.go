@@ -9,7 +9,8 @@ import (
 type config struct {
 	User      string
 	Passwd    string
-	Link      string
+	Link4     string
+	Link6     string
 	Interval  time.Duration
 	PrefixLen int
 	Records4  []int
