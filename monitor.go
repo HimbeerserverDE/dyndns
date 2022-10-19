@@ -33,7 +33,7 @@ func monitor4(conf *config, update4 chan<- net.IPAddr) {
 			}
 		}
 
-		if !addr4.IP.Equal(prevAddr4) {
+		if !addr4.IP.Equal(prevAddr4.IP) {
 			logger.Println("detected new IPv4 address:", addr4)
 			update4 <- addr4
 
