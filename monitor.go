@@ -64,7 +64,7 @@ func monitor6(conf *config, update6 chan<- *net.IPNet) {
 		for _, netAddr := range addrs {
 			addr := netAddr.(*net.IPAddr)
 
-			if addr.To4() == nil && addr.IP.IsGlobalUnicast() {
+			if addr.IP.To4() == nil && addr.IP.IsGlobalUnicast() {
 				cidr := net.CIDRMask(conf.PrefixLen, 128)
 				prefix6 = addr.IP.Mask(cidr)
 
