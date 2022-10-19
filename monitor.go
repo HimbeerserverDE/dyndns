@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func monitor4(conf *config, update4 chan<- net.IPAddr) {
+func monitor4(conf *config, update4 chan<- *net.IPAddr) {
 	refresh := time.NewTicker(conf.Interval)
 
 	var prevAddr4 *net.IPAddr
@@ -42,7 +42,7 @@ func monitor4(conf *config, update4 chan<- net.IPAddr) {
 	}
 }
 
-func monitor6(conf *config, update6 chan<- net.IPNet) {
+func monitor6(conf *config, update6 chan<- *net.IPNet) {
 	refresh := time.NewTicker(conf.Interval)
 
 	var prevPrefix6 *net.IPNet

@@ -15,8 +15,8 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	update4 := make(chan net.IPAddr)
-	update6 := make(chan net.IPNet)
+	update4 := make(chan *net.IPAddr)
+	update6 := make(chan *net.IPNet)
 
 	go monitor4(conf, update4)
 	go monitor6(conf, update6)
