@@ -4,6 +4,8 @@ package main
 import (
 	"flag"
 	"net"
+
+	"github.com/HimbeerserverDE/inwx"
 )
 
 func main() {
@@ -29,4 +31,15 @@ func main() {
 			// TODO
 		}
 	}
+}
+
+func updateRecords(c *inwx.Client, ids []int, content string) error {
+	_, err := c.Call(&inwx.NSUpdateRecordsCall{
+		IDs: ids,
+		RecordInfo: inwx.RecordInfo{
+			Content: content,
+		},
+	})
+
+	return err
 }
