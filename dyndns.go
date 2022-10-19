@@ -3,6 +3,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net"
 
 	"github.com/HimbeerserverDE/inwx"
@@ -26,9 +27,13 @@ func main() {
 	for {
 		select {
 		case newAddr := <-update4:
-			// TODO
+			if err := nsUpdate4(conf, newAddr); err != nil {
+				logger.Print(err)
+			}
 		case newPrefix := <-update6:
-			// TODO
+			if err := nsUpdate6(conf, newPrefix); err != nil {
+				logger.Print(err)
+			}
 		}
 	}
 }
@@ -42,4 +47,18 @@ func updateRecords(c *inwx.Client, ids []int, content string) error {
 	})
 
 	return err
+}
+
+func nsUpdate4(conf *config, addr *net.IPAddr) error {
+	clt, err := inwx.Login(inwx.Production, conf.User, conf.Passwd)
+	if err != nil {
+		return err
+	}
+	defer clt.Close()
+
+	return updateRecords(clt, conf.Records4, addr.String())
+}
+
+func nsUpdate6(conf *config, prefix *net.IPNet) error {
+	return fmt.Errorf("updating IPv6 records is not yet implemented")
 }
