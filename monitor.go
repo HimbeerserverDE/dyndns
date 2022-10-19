@@ -2,7 +2,6 @@ package main
 
 import (
 	"net"
-	"reflect"
 	"time"
 )
 
@@ -34,7 +33,7 @@ func monitor4(conf *config, update4 chan<- net.IPAddr) {
 			}
 		}
 
-		if !reflect.DeepEqual(addr4, prevAddr4) {
+		if !addr4.IP.Equal(prevAddr4) {
 			logger.Println("detected new IPv4 address:", addr4)
 			update4 <- addr4
 
@@ -73,7 +72,7 @@ func monitor6(conf *config, update6 chan<- net.IPNet) {
 			}
 		}
 
-		if !reflect.DeepEqual(prefix6, prevPrefix6) {
+		if !prefix6.Equal(prevPrefix6) {
 			logger.Println("detected new IPv6 address:", prefix6)
 			update6 <- prefix6
 
