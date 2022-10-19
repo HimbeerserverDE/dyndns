@@ -18,7 +18,8 @@ func main() {
 	update4 := make(chan net.IPAddr)
 	update6 := make(chan net.IPNet)
 
-	go monitor(conf, update4, update6)
+	go monitor4(conf, update4)
+	go monitor6(conf, update6)
 
 	for {
 		select {
