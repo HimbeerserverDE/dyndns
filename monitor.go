@@ -27,7 +27,7 @@ func monitor4(conf *config, update4 chan<- net.IPAddr) {
 		for _, netAddr := range addrs {
 			addr := netAddr.(*net.IPAddr)
 
-			if addr.To4() != nil && !addr.IP.IsPrivate() {
+			if addr.IP.To4() != nil && !addr.IP.IsPrivate() {
 				addr4 = addr
 				break
 			}
