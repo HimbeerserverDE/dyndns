@@ -81,14 +81,14 @@ func nsUpdate6(conf *config, prefix *net.IPNet) error {
 			continue
 		}
 
-		if len(record.Record) != 1 {
-			logger.Printf("invalid number of IPv6 records: %d != 1", len(record.Record))
+		if n := len(record.Records); n != 1 {
+			logger.Printf("invalid number of IPv6 records: %d != 1", n)
 			continue
 		}
 
-		addr := net.ParseIP(record.Record[0].Content)
+		addr := net.ParseIP(record.Records[0].Content)
 		if addr == nil {
-			logger.Printf("invalid IPv6 record %d: %s", id, record.Record[0].Content)
+			logger.Printf("invalid IPv6 record %d: %s", id, record.Records[0].Content)
 			continue
 		}
 
