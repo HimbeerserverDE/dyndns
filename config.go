@@ -2,9 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"time"
 )
+
+var ErrInsecure = errors.New("config has insecure permissions (need 0?00)")
 
 type config struct {
 	User      string
@@ -18,6 +21,15 @@ type config struct {
 }
 
 func (c *config) parse(location string) error {
+	info, err := os.Stat(location)
+	if err != nil {
+		return err
+	}
+
+	if info.Mode().Perm()&0077 > 0 {
+		return ErrInsecure
+	}
+
 	f, err := os.Open(location)
 	if err != nil {
 		return err
